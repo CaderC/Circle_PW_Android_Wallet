@@ -71,7 +71,7 @@ class WalletCreationActivity : AppCompatActivity() {
         val apiResponseTextView = binding.apiResponseTextView
 
         //Step 1 - REPLACE PLACEHOLDER WITH YOUR APP ID
-        val appId = "YOUR_CIRCLE_WEB3_APP_ID"
+        val appId = "8a7d1d5a-1ab3-550e-b85b-288687ef84a7"
 
         // Initially, hide the EditText fields and TextView
         apiKeyEditText.visibility = android.view.View.INVISIBLE
@@ -158,7 +158,16 @@ class WalletCreationActivity : AppCompatActivity() {
                 // Create OkHttp Client
                 GlobalScope.launch(Dispatchers.IO) {
                       //Step 2 - PASTE CODE HERE FOR "CREATE USER" API
-
+                    val client = OkHttpClient()
+                    val mediaType = "application/json".toMediaTypeOrNull()
+                    val body = "{\"userId\":\"$userId\"}".toRequestBody(mediaType)
+                    val request = Request.Builder()
+                        .url("https://api.circle.com/v1/w3s/users")
+                        .post(body)
+                        .addHeader("accept", "application/json")
+                        .addHeader("content-type", "application/json")
+                        .addHeader("authorization", "Bearer $apiKey")
+                        .build()
                     // Inside your try-catch block for making the API call
                     try {
                         val response = client.newCall(request).execute()
